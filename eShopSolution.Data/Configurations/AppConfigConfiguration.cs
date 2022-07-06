@@ -1,21 +1,21 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using eShopSolution.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Transactions;
 
 namespace eShopSolution.Data.Configurations
 {
-    public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
+    public class AppConfigConfiguration : IEntityTypeConfiguration<AppConfig>
     {
-        public void Configure(EntityTypeBuilder<Transaction> builder)
+        public void Configure(EntityTypeBuilder<AppConfig> builder)
         {
-            builder.ToTable("Transactions");
+            builder.ToTable("AppConfigs");
 
-            builder.HasKey(x => x.Id);
+            builder.HasKey(x => x.Key);
 
-            builder.Property(x => x.Id).UseIdentityColumn();
+            builder.Property(x => x.Value).IsRequired(true);
         }
     }
 }

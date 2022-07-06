@@ -1,7 +1,7 @@
-﻿using System;
+﻿using eShopSolution.Data.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using eShopSolution.Data.Enums;
 
 namespace eShopSolution.Data.Entities
 {
