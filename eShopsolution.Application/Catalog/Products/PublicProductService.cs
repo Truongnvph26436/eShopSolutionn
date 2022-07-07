@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
-using eShopsolution.Application.Catalog.Products.Dtos;
-using eShopsolution.Application.Catalog.Products.Dtos.Public;
-using eShopsolution.Application.Dtos;
 using eShopSolution.Data.EF;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using eShopSolution.ViewModels.Catalog.Products;
+using eShopSolution.ViewModels.Common;
+using eShopSolution.ViewModels.Catalog.Products.Public;
 
 namespace eShopsolution.Application.Catalog.Products
 {

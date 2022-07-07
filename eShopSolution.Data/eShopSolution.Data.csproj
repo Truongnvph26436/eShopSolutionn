@@ -7,6 +7,10 @@
   <ItemGroup>
     <Compile Remove="Migrations\20220706153509_AspNetCoreIdentityDatabase.cs" />
     <Compile Remove="Migrations\20220706153509_AspNetCoreIdentityDatabase.Designer.cs" />
+    <Compile Remove="Migrations\20220707142018_productimagetable.cs" />
+    <Compile Remove="Migrations\20220707142018_productimagetable.Designer.cs" />
+    <Compile Remove="Migrations\20220707142041_addproductimagetable.cs" />
+    <Compile Remove="Migrations\20220707142041_addproductimagetable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
