@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using eShopsolution.Application.Catalog.Products;
-using eShopsolution.Application.Common;
 using eShopSolution.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -33,8 +32,6 @@ namespace eShopSolution.BackenApi
 
             //Declare DI
             services.AddTransient<IPublicProductService, PublicProductService>();
-            services.AddTransient<IManageProductService, ManageProductService>();
-            services.AddTransient<IStorageService, FileStorageService>();
 
             services.AddControllersWithViews();
 
