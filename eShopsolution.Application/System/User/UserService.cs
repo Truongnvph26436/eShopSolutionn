@@ -67,11 +67,11 @@ namespace eShopsolution.Application.System.User
         {
             var user = new AppUser()
             {
-                UserName = request.UserName,
-                Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Dob = request.Dob,
+                Email = request.Email,
+                UserName = request.UserName,
                 PhoneNumber = request.PhoneNumber
             };
             var result = await _userManager.CreateAsync(user, request.Password);
