@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.Threading.Tasks;
 using eShopSolution.ViewModels.Catalog.ProductImages;
 using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
-using Microsoft.AspNetCore.Http;
-using GetPublicProductPagingRequest = eShopSolution.ViewModels.Catalog.Products.GetPublicProductPagingRequest;
 
 namespace eShopsolution.Application.Catalog.Products
 {
