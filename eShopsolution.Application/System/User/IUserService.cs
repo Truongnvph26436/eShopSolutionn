@@ -1,7 +1,10 @@
-﻿using System.Threading.Tasks;
-using eShopSolution.ViewModels.System.Users;
+﻿using eShopSolution.ViewModels.System.Users;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace eShopsolution.Application.System.User
+namespace eShopSolution.Application.System.Users
 {
     public interface IUserService
     {

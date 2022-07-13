@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using eShopsolution.Application.Catalog.Products;
 using eShopsolution.Application.Common;
 using eShopsolution.Application.System.User;
+using eShopSolution.Application.System.Users;
 using eShopSolution.Data.EF;
 using eShopSolution.Data.Entities;
 using eShopSolution.ViewModels.System.Users;
