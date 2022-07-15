@@ -7,7 +7,6 @@ using Microsoft.Extensions.Hosting;
 using eShopsolution.Application.Catalog.Products;
 using eShopsolution.Application.Common;
 using eShopsolution.Application.System.User;
-using eShopSolution.Application.System.Users;
 using eShopSolution.Data.EF;
 using eShopSolution.Data.Entities;
 using eShopSolution.ViewModels.System.Users;
@@ -37,8 +36,7 @@ namespace eShopSolution.BackenApi
                 options.UseSqlServer(Configuration.GetConnectionString("eShopSolutionDb")));
 
             //Declare DI
-            services.AddTransient<IPublicProductService, PublicProductService>();
-            services.AddTransient<IManageProductService, ManageProductService>();
+            services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();

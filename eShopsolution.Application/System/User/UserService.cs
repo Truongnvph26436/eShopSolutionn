@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using eShopSolution.Application.System.Users;
 using eShopSolution.Data.Entities;
 using eShopSolution.Utilities.Exceptions;
+using eShopSolution.ViewModels.Catalog.Products;
+using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -63,6 +66,45 @@ namespace eShopsolution.Application.System.User
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public async Task<PagedResult<UserVm>> GetUsersPaging(GetUserPagingRequest request)
+        {
+            var query = _userManager.Users;
+            if (!string.IsNullOrEmpty(request.Keyword))
+            {
+                query = query.Where(
+                    c => c.UserName.Contains(request.Keyword) || c.PhoneNumber.Contains(request.Keyword));
+            }
+
+            #region 3. Paging
+
+            int totalRow = await query.CountAsync();
+
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new UserVm()
+                {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    PhoneNumber = x.PhoneNumber,
+                    UserName = x.UserName,
+                    Email = x.Email
+                }).ToListAsync();
+
+            #endregion
+
+            #region 4. Select and projection
+
+            var pagedResult = new PagedResult<UserVm>()
+            {
+                TotalRecord = totalRow,
+                Items = data
+            };
+            return pagedResult;
+
+            #endregion
         }
 
         public async Task<bool> Register(RegisterRequest request)

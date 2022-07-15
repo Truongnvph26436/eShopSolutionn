@@ -1,15 +1,15 @@
-﻿using eShopSolution.ViewModels.System.Users;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using eShopSolution.ViewModels.Common;
+using eShopSolution.ViewModels.System.Users;
 
-namespace eShopSolution.Application.System.Users
+namespace eShopsolution.Application.System.User
 {
     public interface IUserService
     {
         Task<string> Authencate(LoginRequest request);
 
         Task<bool> Register(RegisterRequest request);
+
+        Task<PagedResult<UserVm>> GetUsersPaging(GetUserPagingRequest request);
     }
 }
