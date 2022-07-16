@@ -2,14 +2,10 @@ using eShopSolution.ViewModels.System.Users;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using eShopSolution.AdminApp.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -31,8 +27,8 @@ namespace eShopSolution.AdminApp
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
-                options.LoginPath = "/User/Login/";
-                options.AccessDeniedPath = "/User/Forbidden/";
+                options.LoginPath = "/Login/Index/";
+                options.AccessDeniedPath = "/Index/Forbidden/";
             });
 
             services.AddControllersWithViews().AddFluentValidation(fv =>
