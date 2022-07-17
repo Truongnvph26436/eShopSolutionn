@@ -1,6 +1,10 @@
-﻿namespace eShopSolution.ViewModels.Common
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace eShopSolution.ViewModels.Common
 {
-    public class PagingRequestBase : RequestBase
+    public class PagingRequestBase
     {
         public int PageIndex { get; set; }
 

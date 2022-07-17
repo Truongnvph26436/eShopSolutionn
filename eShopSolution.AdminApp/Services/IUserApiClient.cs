@@ -1,15 +1,22 @@
-﻿using System.Threading.Tasks;
-using eShopSolution.ViewModels.Common;
+﻿using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.System.Users;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace eShopSolution.AdminApp.Services
 {
     public interface IUserApiClient
     {
-        Task<string> Authenticate(LoginRequest request);
-        Task<PagedResult<UserVm>> GetUSerPagings(GetUserPagingRequest request);
+        Task<ApiResult<string>> Authenticate(LoginRequest request);
 
-        Task<bool> RegisterUser(RegisterRequest request);
+        Task<ApiResult<PagedResult<UserVm>>> GetUsersPagings(GetUserPagingRequest request);
+
+        Task<ApiResult<bool>> RegisterUser(RegisterRequest registerRequest);
+
+        Task<ApiResult<bool>> UpdateUser(Guid id, UserUpdateRequest request);
+
+        Task<ApiResult<UserVm>> GetById(Guid id);
     }
 }
