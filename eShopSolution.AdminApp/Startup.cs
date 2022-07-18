@@ -1,17 +1,14 @@
+using System;
+using eShopSolution.AdminApp.Services;
 using eShopSolution.ViewModels.System.Users;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using eShopSolution.AdminApp.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace eShopSolution.AdminApp
 {
@@ -29,26 +26,32 @@ namespace eShopSolution.AdminApp
         {
             services.AddHttpClient();
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Login/Index";
+                    options.AccessDeniedPath = "/Login/Forbidden/";
+                });
+
+            services.AddControllersWithViews()
+                     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
+
+            services.AddSession(options =>
             {
-                options.LoginPath = "/User/Login/";
-                options.AccessDeniedPath = "/User/Forbidden/";
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
             });
-
-            services.AddControllersWithViews().AddFluentValidation(fv =>
-                fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
-
-            services.AddSession(options => { options.IdleTimeout = TimeSpan.FromSeconds(30); });
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddTransient<IUserApiClient, UserApiClient>();
+
             IMvcBuilder builder = services.AddRazorPages();
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
 #if DEBUG
             if (environment == Environments.Development)
             {
                 builder.AddRazorRuntimeCompilation();
             }
-
 #endif
         }
 
@@ -65,7 +68,6 @@ namespace eShopSolution.AdminApp
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

@@ -1,24 +1,24 @@
 using System.Collections.Generic;
+using eShopsolution.Application.Catalog.Products;
+using eShopsolution.Application.Common;
+using eShopSolution.Application.System.Users;
+using eShopSolution.Data.EF;
+using eShopSolution.Data.Entities;
+using eShopSolution.Utilities.Constants;
+using eShopSolution.ViewModels.System.Users;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using eShopsolution.Application.Catalog.Products;
-using eShopsolution.Application.Common;
-using eShopsolution.Application.System.User;
-using eShopSolution.Data.EF;
-using eShopSolution.Data.Entities;
-using eShopSolution.ViewModels.System.Users;
-using FluentValidation;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-namespace eShopSolution.BackenApi
+namespace eShopSolution.BackendApi
 {
     public class Startup
     {
@@ -33,11 +33,16 @@ namespace eShopSolution.BackenApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<EShopDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("eShopSolutionDb")));
+                options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
+
+            services.AddIdentity<AppUser, AppRole>()
+                .AddEntityFrameworkStores<EShopDbContext>()
+                .AddDefaultTokenProviders();
 
             //Declare DI
-            services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
+
+            services.AddTransient<IProductService, ProductService>();
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
@@ -48,9 +53,6 @@ namespace eShopSolution.BackenApi
 
             services.AddControllers()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
-
-            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<EShopDbContext>()
-                .AddDefaultTokenProviders();
 
             services.AddSwaggerGen(c =>
             {
@@ -68,22 +70,22 @@ namespace eShopSolution.BackenApi
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-                {
+                  {
                     {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            },
-                            Scheme = "oauth2",
-                            Name = "Bearer",
-                            In = ParameterLocation.Header,
+                      new OpenApiSecurityScheme
+                      {
+                        Reference = new OpenApiReference
+                          {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                          },
+                          Scheme = "oauth2",
+                          Name = "Bearer",
+                          In = ParameterLocation.Header,
                         },
                         new List<string>()
-                    }
-                });
+                      }
+                    });
             });
 
             string issuer = Configuration.GetValue<string>("Tokens:Issuer");
@@ -91,26 +93,26 @@ namespace eShopSolution.BackenApi
             byte[] signingKeyBytes = System.Text.Encoding.UTF8.GetBytes(signingKey);
 
             services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(options =>
-                {
-                    options.RequireHttpsMetadata = false;
-                    options.SaveToken = true;
-                    options.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = issuer,
-                        ValidateAudience = true,
-                        ValidAudience = issuer,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ClockSkew = System.TimeSpan.Zero,
-                        IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
-                    };
-                });
+                    ValidateIssuer = true,
+                    ValidIssuer = issuer,
+                    ValidateAudience = true,
+                    ValidAudience = issuer,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = System.TimeSpan.Zero,
+                    IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -126,7 +128,6 @@ namespace eShopSolution.BackenApi
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -137,8 +138,10 @@ namespace eShopSolution.BackenApi
 
             app.UseSwagger();
 
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger eShopSolution V1"));
-
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger eShopSolution V1");
+            });
 
             app.UseEndpoints(endpoints =>
             {

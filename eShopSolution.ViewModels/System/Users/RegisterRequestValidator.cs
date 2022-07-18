@@ -18,8 +18,7 @@ namespace eShopSolution.ViewModels.System.Users
                 .WithMessage("Birthday cannot greater than 100 years");
             RuleFor(c => c.Email).NotEmpty().WithMessage("Email is required")
                 .Matches(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$").WithMessage("Email format not match");
-            RuleFor(c => c.PhoneNumber).NotEmpty().WithMessage("Phone number is  required").Length(10)
-                .Matches(@"/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/");
+            RuleFor(c => c.PhoneNumber).NotEmpty().WithMessage("Phone number is  required").Length(10);
             RuleFor(c => c.UserName).NotEmpty().WithMessage("User name is required");
             RuleFor(c => c.Password).NotEmpty().WithMessage("Password is required").MinimumLength(6)
                 .WithMessage("Password is at least 6 characters");
