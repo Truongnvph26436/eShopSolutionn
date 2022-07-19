@@ -63,9 +63,7 @@ namespace eShopsolution.Application.Catalog.Products
 
             var pagedResult = new PagedResult<ProductViewModel>()
             {
-                TotalRecords = totalRow,
-                PageIndex = request.PageIndex,
-                PageSize = request.PageSize,
+                TotalRecord = totalRow,
                 Items = data
             };
             return pagedResult;
