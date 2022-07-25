@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using eShopsolution.Application.Catalog.Products;
+using eShopSolution.Application.Catalog.Products;
 using eShopsolution.Application.Common;
 using eShopSolution.Application.System.Languages;
 using eShopSolution.Application.System.Roles;
@@ -20,6 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using eShopSolution.Application.Common;
 
 namespace eShopSolution.BackendApi
 {

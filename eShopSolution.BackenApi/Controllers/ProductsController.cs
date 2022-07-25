@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using eShopsolution.Application.Catalog.Products;
+using eShopSolution.Application.Catalog.Products;
 using eShopSolution.ViewModels.Catalog.ProductImages;
 using eShopSolution.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Authorization;
@@ -21,17 +21,15 @@ namespace eShopSolution.BackenApi.Controllers
             _productService = productService;
         }
 
-        //URL://http://localhost:port/product?pageIndex=1&pageSize=10&categoryId=
-        [HttpGet("{languageId}")]
-        public async Task<IActionResult> GetAllPaging(string languageId,
-            [FromQuery] GetPublicProductPagingRequest request)
+        
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetManageProductPagingRequest request)
         {
-            var products = await _productService.GetAllByCategory(languageId, request);
+            var products = await _productService.GetAllPaging(request);
             return Ok(products);
         }
 
 
-        //URL://http://localhost:port/1
         [HttpGet("{productId}/{languageId}")]
         public async Task<IActionResult> GetById(int productId, string languageId)
         {
@@ -44,7 +42,6 @@ namespace eShopSolution.BackenApi.Controllers
             return Ok(products);
         }
 
-        //URL://http://localhost:port/product
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
